@@ -172,7 +172,7 @@ namespace WinFormsApp1
                 return string.Format(nameResponse, UserName);
             }
 
-            // 2. Detect greetings
+            // Detect greetings
             if (query == "hi" || query == "hello" ||
                 query == "hey" || query.StartsWith("hello ") ||
                 query.StartsWith("hi ") || query.StartsWith("hey "))
@@ -184,10 +184,10 @@ namespace WinFormsApp1
                 return string.Format(greetingResponse, UserName);
             }
 
-            // 3. Detect the exact topic mentioned in the question
+            // Detect the exact topic mentioned in the question
             string topic = DetectTopic(query);
 
-            // 4. Remember the user's favourite topic
+            // Remember the user's favourite topic
             if ((query.Contains("interested in") || query.Contains("i like")) &&
                 !string.IsNullOrEmpty(topic))
             {
@@ -198,7 +198,7 @@ namespace WinFormsApp1
                 return string.Format(favoriteResponse, topic);
             }
 
-            // 5. Detect feelings and respond with a relevant tip
+            // Detect feelings and respond with a relevant tip
             foreach (string sentiment in sentimentKeywords)
             {
                 if (query.Contains(sentiment))
