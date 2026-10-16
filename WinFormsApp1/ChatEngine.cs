@@ -159,7 +159,7 @@ namespace WinFormsApp1
 
             string query = input.Trim().ToLowerInvariant();
 
-            // 1. Remember the user's name
+            // Remember the user's name
             if (query.Contains("my name is"))
             {
                 int index = query.IndexOf("my name is") + 10;
