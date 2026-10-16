@@ -17,7 +17,7 @@ The chatbot logic is implemented in the `ChatEngine` class:
 - It uses dictionaries to store questions and answers related to various topics.
 - It recognizes user greetings, topics, and sentiment keywords to generate responses.
 - The chat remembers some conversation context to give personalized replies.
-- If it doesn’t recognize the user’s question, it suggests topics or asks for clarification.
+- If it doesnâ€™t recognize the userâ€™s question, it suggests topics or asks for clarification.
 
 The Windows Forms app (`Form1`) handles the user interface:
 - Displays the ongoing conversation between the user and the bot.
@@ -27,7 +27,7 @@ The Windows Forms app (`Form1`) handles the user interface:
 
 ## How to Use
 1. Run the application.
-2. You will see a welcome message from the chatbot.
+2. You will see a displayed welcome message from the chatbot.
 3. Type your questions about online safety into the input box.
 4. Press Enter to send your question.
 5. The chatbot will reply with helpful information.
