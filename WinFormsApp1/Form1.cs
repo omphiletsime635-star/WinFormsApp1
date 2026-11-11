@@ -37,7 +37,7 @@ namespace WinFormsApp1
         {
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true; 
+                e.SuppressKeyPress = true;
                 SendMessage(sender, e);
             }
         }
@@ -73,7 +73,7 @@ namespace WinFormsApp1
                 if (File.Exists(audioPath))
                 {
                     System.Media.SoundPlayer player = new System.Media.SoundPlayer(audioPath);
-                    player.Play(); 
+                    player.Play();
                 }
             }
             catch (Exception ex)
@@ -109,6 +109,16 @@ namespace WinFormsApp1
             // This handles the initial welcome message and all bot replies.
             chatBox.SelectionStart = chatBox.Text.Length;
             chatBox.ScrollToCaret();
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
