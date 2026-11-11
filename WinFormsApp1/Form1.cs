@@ -21,7 +21,7 @@ namespace WinFormsApp1
                 logo.Image = Image.FromFile(logoPath);
             }
 
-            // Initial welcome message
+            // Initial welcome message and play sound
             DisplayWelcomeMessage();
 
             PlayAudio();
