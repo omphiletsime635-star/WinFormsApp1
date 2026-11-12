@@ -14,6 +14,8 @@ namespace WinFormsApp1
         int currentQuestionIndex = 0;
         int quizScore = 0;
 
+        List<string> activityLog = new List<string>(); 
+
         public Form1()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace WinFormsApp1
 
             PlayAudio();
             InitializeQuiz();
+            LogActivity("System: Chatbot started and Quiz initialized."); 
         }
 
         private void InitializeQuiz()
@@ -174,9 +177,25 @@ namespace WinFormsApp1
             lblFeedback.Text = "";
             lblScore.Text = $"Score: {quizScore}";
             btnSubmitAnswer.Text = "Submit Answer";
-        } 
+        }
 
-        
+        private void LogActivity(string action)
+        {
+            // 1. Create a log entry with the current time (e.g., "[14:35] User started quiz")
+            string logEntry = $"[{DateTime.Now:HH:mm}] {action}";
+
+            // 2. Add it to our master list
+            activityLog.Add(logEntry);
+
+            // 3. Update the UI ListBox (show only the last 10 so it doesn't get too full)
+            lstActivityLog.Items.Clear();
+            var recentLogs = activityLog.Skip(Math.Max(0, activityLog.Count - 10)).ToList();
+
+            foreach (var log in recentLogs)
+            {
+                lstActivityLog.Items.Add(log);
+            }
+        }
 
         private void DisplayWelcomeMessage()
         {
@@ -195,6 +214,7 @@ namespace WinFormsApp1
 
         private void SendMessage(object sender, EventArgs e)
         {
+            LogActivity("User typed a message in the chatbot.");
             string question = inputBox.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(question))
@@ -274,6 +294,7 @@ namespace WinFormsApp1
 
         private void btnSubmitAnswer_Click(object sender, EventArgs e)
         {
+            LogActivity("User submitted a quiz answer.");
             if (btnSubmitAnswer.Text == "Next Question")
             {
                 currentQuestionIndex++;
@@ -308,6 +329,7 @@ namespace WinFormsApp1
 
             lblScore.Text = $"Score: {quizScore}";
             btnSubmitAnswer.Text = "Next Question";
+            LogActivity($"User completed the quiz with a score of {quizScore}.");
         }
 
         private void picResultGif_Click(object sender, EventArgs e)

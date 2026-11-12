@@ -52,12 +52,15 @@ namespace WinFormsApp1
             radOptionA = new RadioButton();
             lblQuestion = new Label();
             tabPage4 = new TabPage();
+            lstActivityLog = new ListBox();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)logo).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
             tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picResultGif).BeginInit();
+            tabPage4.SuspendLayout();
             SuspendLayout();
             // 
             // chatBox
@@ -206,7 +209,7 @@ namespace WinFormsApp1
             // 
             picResultGif.Location = new Point(29, 437);
             picResultGif.Name = "picResultGif";
-            picResultGif.Size = new Size(200, 200);
+            picResultGif.Size = new Size(214, 200);
             picResultGif.SizeMode = PictureBoxSizeMode.Zoom;
             picResultGif.TabIndex = 9;
             picResultGif.TabStop = false;
@@ -303,12 +306,31 @@ namespace WinFormsApp1
             // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(lstActivityLog);
+            tabPage4.Controls.Add(label3);
             tabPage4.Location = new Point(4, 29);
             tabPage4.Name = "tabPage4";
             tabPage4.Size = new Size(906, 699);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Activity Log";
             tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // lstActivityLog
+            // 
+            lstActivityLog.FormattingEnabled = true;
+            lstActivityLog.Location = new Point(42, 102);
+            lstActivityLog.Name = "lstActivityLog";
+            lstActivityLog.Size = new Size(810, 544);
+            lstActivityLog.TabIndex = 1;
+            // 
+            // label3
+            // 
+            label3.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(14, 14);
+            label3.Name = "label3";
+            label3.Size = new Size(130, 60);
+            label3.TabIndex = 0;
+            label3.Text = "Recent Bot Actions:";
             // 
             // Form1
             // 
@@ -334,6 +356,7 @@ namespace WinFormsApp1
             tabPage3.ResumeLayout(false);
             tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picResultGif).EndInit();
+            tabPage4.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -387,5 +410,7 @@ namespace WinFormsApp1
         private Label lblFeedback;
         private Button btnRestartQuiz;
         private PictureBox picResultGif;
+        private ListBox lstActivityLog;
+        private Label label3;
     }
 }
