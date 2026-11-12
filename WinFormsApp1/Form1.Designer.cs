@@ -37,11 +37,27 @@ namespace WinFormsApp1
             inputBox = new TextBox();
             sendButton = new Button();
             tabPage2 = new TabPage();
+            textBox1 = new TextBox();
+            label2 = new Label();
+            txtTaskTitle = new TextBox();
             tabPage3 = new TabPage();
+            picResultGif = new PictureBox();
+            btnRestartQuiz = new Button();
+            lblFeedback = new Label();
+            lblScore = new Label();
+            btnSubmitAnswer = new Button();
+            radOptionD = new RadioButton();
+            radOptionC = new RadioButton();
+            radOptionB = new RadioButton();
+            radOptionA = new RadioButton();
+            lblQuestion = new Label();
             tabPage4 = new TabPage();
             ((System.ComponentModel.ISupportInitialize)logo).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picResultGif).BeginInit();
             SuspendLayout();
             // 
             // chatBox
@@ -103,7 +119,7 @@ namespace WinFormsApp1
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(906, 699);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
+            tabPage1.Text = "ChatBot";
             tabPage1.UseVisualStyleBackColor = true;
             tabPage1.Click += tabPage1_Click;
             // 
@@ -116,6 +132,7 @@ namespace WinFormsApp1
             inputBox.Name = "inputBox";
             inputBox.Size = new Size(706, 27);
             inputBox.TabIndex = 6;
+            inputBox.KeyDown += InputBox_KeyDown;
             // 
             // sendButton
             // 
@@ -127,33 +144,170 @@ namespace WinFormsApp1
             sendButton.TabIndex = 5;
             sendButton.Text = "SEND";
             sendButton.UseVisualStyleBackColor = false;
+            sendButton.Click += SendMessage;
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(textBox1);
+            tabPage2.Controls.Add(label2);
+            tabPage2.Controls.Add(txtTaskTitle);
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(672, 509);
+            tabPage2.Size = new Size(906, 699);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
+            tabPage2.Text = "Task Manager ";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(99, 30);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(125, 27);
+            textBox1.TabIndex = 2;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(24, 37);
+            label2.Name = "label2";
+            label2.Size = new Size(69, 20);
+            label2.TabIndex = 1;
+            label2.Text = "Task Title";
+            // 
+            // txtTaskTitle
+            // 
+            txtTaskTitle.Location = new Point(26, 637);
+            txtTaskTitle.Name = "txtTaskTitle";
+            txtTaskTitle.Size = new Size(125, 27);
+            txtTaskTitle.TabIndex = 0;
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(picResultGif);
+            tabPage3.Controls.Add(btnRestartQuiz);
+            tabPage3.Controls.Add(lblFeedback);
+            tabPage3.Controls.Add(lblScore);
+            tabPage3.Controls.Add(btnSubmitAnswer);
+            tabPage3.Controls.Add(radOptionD);
+            tabPage3.Controls.Add(radOptionC);
+            tabPage3.Controls.Add(radOptionB);
+            tabPage3.Controls.Add(radOptionA);
+            tabPage3.Controls.Add(lblQuestion);
+            tabPage3.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabPage3.Location = new Point(4, 29);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(672, 509);
+            tabPage3.Size = new Size(906, 699);
             tabPage3.TabIndex = 2;
-            tabPage3.Text = "tabPage3";
+            tabPage3.Text = "Cyber Quiz";
             tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // picResultGif
+            // 
+            picResultGif.Location = new Point(29, 437);
+            picResultGif.Name = "picResultGif";
+            picResultGif.Size = new Size(200, 200);
+            picResultGif.SizeMode = PictureBoxSizeMode.Zoom;
+            picResultGif.TabIndex = 9;
+            picResultGif.TabStop = false;
+            picResultGif.Visible = false;
+            picResultGif.Click += picResultGif_Click;
+            // 
+            // btnRestartQuiz
+            // 
+            btnRestartQuiz.Font = new Font("Arial", 10F, FontStyle.Bold);
+            btnRestartQuiz.Location = new Point(22, 643);
+            btnRestartQuiz.Name = "btnRestartQuiz";
+            btnRestartQuiz.Size = new Size(130, 36);
+            btnRestartQuiz.TabIndex = 8;
+            btnRestartQuiz.Text = "Restart Quiz";
+            btnRestartQuiz.UseVisualStyleBackColor = true;
+            btnRestartQuiz.Click += btnRestartQuiz_Click;
+            // 
+            // lblFeedback
+            // 
+            lblFeedback.Font = new Font("Arial", 14F, FontStyle.Bold);
+            lblFeedback.ForeColor = SystemColors.ControlDarkDark;
+            lblFeedback.Location = new Point(29, 358);
+            lblFeedback.Name = "lblFeedback";
+            lblFeedback.Size = new Size(700, 72);
+            lblFeedback.TabIndex = 7;
+            // 
+            // lblScore
+            // 
+            lblScore.Font = new Font("Arial", 10F, FontStyle.Bold);
+            lblScore.Location = new Point(393, 652);
+            lblScore.Name = "lblScore";
+            lblScore.Size = new Size(86, 36);
+            lblScore.TabIndex = 6;
+            lblScore.Text = "Score: 0";
+            // 
+            // btnSubmitAnswer
+            // 
+            btnSubmitAnswer.Font = new Font("Arial", 10F, FontStyle.Bold);
+            btnSubmitAnswer.Location = new Point(188, 643);
+            btnSubmitAnswer.Name = "btnSubmitAnswer";
+            btnSubmitAnswer.Size = new Size(148, 36);
+            btnSubmitAnswer.TabIndex = 5;
+            btnSubmitAnswer.Text = "Submit Answer";
+            btnSubmitAnswer.UseVisualStyleBackColor = true;
+            btnSubmitAnswer.Click += btnSubmitAnswer_Click;
+            // 
+            // radOptionD
+            // 
+            radOptionD.AutoSize = true;
+            radOptionD.Location = new Point(29, 321);
+            radOptionD.Name = "radOptionD";
+            radOptionD.Size = new Size(17, 16);
+            radOptionD.TabIndex = 4;
+            radOptionD.UseVisualStyleBackColor = true;
+            // 
+            // radOptionC
+            // 
+            radOptionC.AutoSize = true;
+            radOptionC.Location = new Point(29, 272);
+            radOptionC.Name = "radOptionC";
+            radOptionC.Size = new Size(17, 16);
+            radOptionC.TabIndex = 3;
+            radOptionC.UseVisualStyleBackColor = true;
+            // 
+            // radOptionB
+            // 
+            radOptionB.AutoSize = true;
+            radOptionB.Location = new Point(29, 228);
+            radOptionB.Name = "radOptionB";
+            radOptionB.Size = new Size(17, 16);
+            radOptionB.TabIndex = 2;
+            radOptionB.UseVisualStyleBackColor = true;
+            // 
+            // radOptionA
+            // 
+            radOptionA.AutoSize = true;
+            radOptionA.Checked = true;
+            radOptionA.Location = new Point(29, 178);
+            radOptionA.Name = "radOptionA";
+            radOptionA.Size = new Size(17, 16);
+            radOptionA.TabIndex = 1;
+            radOptionA.TabStop = true;
+            radOptionA.UseVisualStyleBackColor = true;
+            // 
+            // lblQuestion
+            // 
+            lblQuestion.Font = new Font("Arial", 14F, FontStyle.Bold);
+            lblQuestion.Location = new Point(22, 22);
+            lblQuestion.MaximumSize = new Size(700, 700);
+            lblQuestion.Name = "lblQuestion";
+            lblQuestion.Size = new Size(700, 137);
+            lblQuestion.TabIndex = 0;
+            lblQuestion.Text = "Question will appear here...";
             // 
             // tabPage4
             // 
             tabPage4.Location = new Point(4, 29);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(672, 509);
+            tabPage4.Size = new Size(906, 699);
             tabPage4.TabIndex = 3;
-            tabPage4.Text = "tabPage4";
+            tabPage4.Text = "Activity Log";
             tabPage4.UseVisualStyleBackColor = true;
             // 
             // Form1
@@ -175,6 +329,11 @@ namespace WinFormsApp1
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picResultGif).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -215,5 +374,18 @@ namespace WinFormsApp1
         private TabPage tabPage4;
         private TextBox inputBox;
         private Button sendButton;
+        private TextBox txtTaskTitle;
+        private TextBox textBox1;
+        private Label label2;
+        private Label lblQuestion;
+        private RadioButton radOptionD;
+        private RadioButton radOptionC;
+        private RadioButton radOptionB;
+        private RadioButton radOptionA;
+        private Button btnSubmitAnswer;
+        private Label lblScore;
+        private Label lblFeedback;
+        private Button btnRestartQuiz;
+        private PictureBox picResultGif;
     }
 }
