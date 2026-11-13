@@ -1,4 +1,4 @@
-﻿
+
 namespace WinFormsApp1
 {
     partial class Form1
@@ -29,17 +29,26 @@ namespace WinFormsApp1
         /// </summary>
         private void InitializeComponent()
         {
-            chatBox = new TextBox();
+            components = new System.ComponentModel.Container();
+            richChatBox = new TextBox();
             logo = new PictureBox();
             label1 = new Label();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            chatDisplay = new RichTextBox();
             inputBox = new TextBox();
             sendButton = new Button();
             tabPage2 = new TabPage();
-            textBox1 = new TextBox();
-            label2 = new Label();
+            btnDeleteTask = new Button();
+            btnCompleteTask = new Button();
+            dgvTasks = new DataGridView();
+            btnAddTask = new Button();
+            dtpReminder = new DateTimePicker();
+            label5 = new Label();
+            txtTaskDesc = new TextBox();
+            label4 = new Label();
             txtTaskTitle = new TextBox();
+            label2 = new Label();
             tabPage3 = new TabPage();
             picResultGif = new PictureBox();
             btnRestartQuiz = new Button();
@@ -54,31 +63,33 @@ namespace WinFormsApp1
             tabPage4 = new TabPage();
             lstActivityLog = new ListBox();
             label3 = new Label();
+            contextMenuStrip1 = new ContextMenuStrip(components);
             ((System.ComponentModel.ISupportInitialize)logo).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvTasks).BeginInit();
             tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picResultGif).BeginInit();
             tabPage4.SuspendLayout();
             SuspendLayout();
             // 
-            // chatBox
+            // richChatBox
             // 
-            chatBox.AccessibleName = "inputBox";
-            chatBox.BackColor = SystemColors.ActiveCaption;
-            chatBox.Location = new Point(434, 88);
-            chatBox.Margin = new Padding(3, 4, 3, 4);
-            chatBox.MaximumSize = new Size(297, 4);
-            chatBox.MinimumSize = new Size(914, 732);
-            chatBox.Multiline = true;
-            chatBox.Name = "chatBox";
-            chatBox.ReadOnly = true;
-            chatBox.ScrollBars = ScrollBars.Vertical;
-            chatBox.Size = new Size(914, 732);
-            chatBox.TabIndex = 5;
-            chatBox.TextChanged += chatBox_TextChanged;
-            chatBox.KeyDown += InputBox_KeyDown;
+            richChatBox.AccessibleName = "inputBox";
+            richChatBox.BackColor = SystemColors.ActiveCaption;
+            richChatBox.Location = new Point(434, 88);
+            richChatBox.Margin = new Padding(3, 4, 3, 4);
+            richChatBox.MaximumSize = new Size(297, 4);
+            richChatBox.MinimumSize = new Size(914, 732);
+            richChatBox.Multiline = true;
+            richChatBox.Name = "richChatBox";
+            richChatBox.ReadOnly = true;
+            richChatBox.ScrollBars = ScrollBars.Vertical;
+            richChatBox.Size = new Size(914, 732);
+            richChatBox.TabIndex = 5;
+            richChatBox.TextChanged += richChatBox_TextChanged;
+            richChatBox.KeyDown += InputBox_KeyDown;
             // 
             // logo
             // 
@@ -115,6 +126,7 @@ namespace WinFormsApp1
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(chatDisplay);
             tabPage1.Controls.Add(inputBox);
             tabPage1.Controls.Add(sendButton);
             tabPage1.Location = new Point(4, 29);
@@ -126,9 +138,19 @@ namespace WinFormsApp1
             tabPage1.UseVisualStyleBackColor = true;
             tabPage1.Click += tabPage1_Click;
             // 
+            // chatDisplay
+            // 
+            chatDisplay.Location = new Point(17, 39);
+            chatDisplay.Name = "chatDisplay";
+            chatDisplay.ReadOnly = true;
+            chatDisplay.ScrollBars = RichTextBoxScrollBars.Vertical;
+            chatDisplay.Size = new Size(865, 574);
+            chatDisplay.TabIndex = 7;
+            chatDisplay.Text = "";
+            // 
             // inputBox
             // 
-            inputBox.AccessibleName = "chatBox";
+            inputBox.AccessibleName = "richChatBox";
             inputBox.BackColor = SystemColors.ActiveCaption;
             inputBox.Location = new Point(17, 653);
             inputBox.Margin = new Padding(3, 4, 3, 4);
@@ -151,9 +173,16 @@ namespace WinFormsApp1
             // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(textBox1);
-            tabPage2.Controls.Add(label2);
+            tabPage2.Controls.Add(btnDeleteTask);
+            tabPage2.Controls.Add(btnCompleteTask);
+            tabPage2.Controls.Add(dgvTasks);
+            tabPage2.Controls.Add(btnAddTask);
+            tabPage2.Controls.Add(dtpReminder);
+            tabPage2.Controls.Add(label5);
+            tabPage2.Controls.Add(txtTaskDesc);
+            tabPage2.Controls.Add(label4);
             tabPage2.Controls.Add(txtTaskTitle);
+            tabPage2.Controls.Add(label2);
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -162,28 +191,97 @@ namespace WinFormsApp1
             tabPage2.Text = "Task Manager ";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // btnDeleteTask
             // 
-            textBox1.Location = new Point(99, 30);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(125, 27);
-            textBox1.TabIndex = 2;
+            btnDeleteTask.Location = new Point(721, 389);
+            btnDeleteTask.Name = "btnDeleteTask";
+            btnDeleteTask.Size = new Size(103, 29);
+            btnDeleteTask.TabIndex = 9;
+            btnDeleteTask.Text = "Delete Task";
+            btnDeleteTask.UseVisualStyleBackColor = true;
+            btnDeleteTask.Click += btnDeleteTask_Click;
+            // 
+            // btnCompleteTask
+            // 
+            btnCompleteTask.Location = new Point(542, 389);
+            btnCompleteTask.Name = "btnCompleteTask";
+            btnCompleteTask.Size = new Size(134, 29);
+            btnCompleteTask.TabIndex = 8;
+            btnCompleteTask.Text = "Mark Completed";
+            btnCompleteTask.UseVisualStyleBackColor = true;
+            btnCompleteTask.Click += btnCompleteTask_Click;
+            // 
+            // dgvTasks
+            // 
+            dgvTasks.AllowUserToAddRows = false;
+            dgvTasks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvTasks.Location = new Point(503, 14);
+            dgvTasks.Name = "dgvTasks";
+            dgvTasks.ReadOnly = true;
+            dgvTasks.RowHeadersWidth = 51;
+            dgvTasks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTasks.Size = new Size(382, 329);
+            dgvTasks.TabIndex = 7;
+            // 
+            // btnAddTask
+            // 
+            btnAddTask.Location = new Point(30, 477);
+            btnAddTask.Name = "btnAddTask";
+            btnAddTask.Size = new Size(94, 29);
+            btnAddTask.TabIndex = 6;
+            btnAddTask.Text = "Add Task";
+            btnAddTask.UseVisualStyleBackColor = true;
+            btnAddTask.Click += btnAddTask_Click;
+            // 
+            // dtpReminder
+            // 
+            dtpReminder.Location = new Point(160, 386);
+            dtpReminder.Name = "dtpReminder";
+            dtpReminder.ShowCheckBox = true;
+            dtpReminder.Size = new Size(250, 27);
+            dtpReminder.TabIndex = 5;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(15, 393);
+            label5.Name = "label5";
+            label5.Size = new Size(109, 20);
+            label5.TabIndex = 4;
+            label5.Text = "Reminder Date";
+            // 
+            // txtTaskDesc
+            // 
+            txtTaskDesc.Location = new Point(160, 78);
+            txtTaskDesc.Multiline = true;
+            txtTaskDesc.Name = "txtTaskDesc";
+            txtTaskDesc.Size = new Size(267, 246);
+            txtTaskDesc.TabIndex = 3;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(15, 78);
+            label4.Name = "label4";
+            label4.Size = new Size(85, 20);
+            label4.TabIndex = 2;
+            label4.Text = "Description";
+            // 
+            // txtTaskTitle
+            // 
+            txtTaskTitle.Location = new Point(160, 14);
+            txtTaskTitle.Name = "txtTaskTitle";
+            txtTaskTitle.Size = new Size(125, 27);
+            txtTaskTitle.TabIndex = 1;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(24, 37);
+            label2.Location = new Point(15, 21);
             label2.Name = "label2";
             label2.Size = new Size(69, 20);
-            label2.TabIndex = 1;
+            label2.TabIndex = 0;
             label2.Text = "Task Title";
-            // 
-            // txtTaskTitle
-            // 
-            txtTaskTitle.Location = new Point(26, 637);
-            txtTaskTitle.Name = "txtTaskTitle";
-            txtTaskTitle.Size = new Size(125, 27);
-            txtTaskTitle.TabIndex = 0;
             // 
             // tabPage3
             // 
@@ -332,6 +430,12 @@ namespace WinFormsApp1
             label3.TabIndex = 0;
             label3.Text = "Recent Bot Actions:";
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
+            // 
             // Form1
             // 
             AccessibleName = "";
@@ -342,7 +446,7 @@ namespace WinFormsApp1
             Controls.Add(tabControl1);
             Controls.Add(label1);
             Controls.Add(logo);
-            Controls.Add(chatBox);
+            Controls.Add(richChatBox);
             Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = "Zamaswasi Cybersecurity AwarenessBot";
@@ -353,6 +457,7 @@ namespace WinFormsApp1
             tabPage1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvTasks).EndInit();
             tabPage3.ResumeLayout(false);
             tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picResultGif).EndInit();
@@ -387,7 +492,7 @@ namespace WinFormsApp1
         }
 
         #endregion
-        private TextBox chatBox;
+        private TextBox richChatBox;
         private PictureBox logo;
         private Label label1;
         private TabControl tabControl1;
@@ -397,9 +502,6 @@ namespace WinFormsApp1
         private TabPage tabPage4;
         private TextBox inputBox;
         private Button sendButton;
-        private TextBox txtTaskTitle;
-        private TextBox textBox1;
-        private Label label2;
         private Label lblQuestion;
         private RadioButton radOptionD;
         private RadioButton radOptionC;
@@ -412,5 +514,17 @@ namespace WinFormsApp1
         private PictureBox picResultGif;
         private ListBox lstActivityLog;
         private Label label3;
+        private TextBox txtTaskTitle;
+        private Label label2;
+        private DateTimePicker dtpReminder;
+        private Label label5;
+        private TextBox txtTaskDesc;
+        private Label label4;
+        private DataGridView dgvTasks;
+        private Button btnAddTask;
+        private Button btnCompleteTask;
+        private Button btnDeleteTask;
+        private ContextMenuStrip contextMenuStrip1;
+        private RichTextBox chatDisplay;
     }
 }
