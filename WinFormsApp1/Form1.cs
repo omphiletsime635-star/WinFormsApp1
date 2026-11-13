@@ -14,7 +14,8 @@ namespace WinFormsApp1
         int currentQuestionIndex = 0;
         int quizScore = 0;
 
-        List<string> activityLog = new List<string>(); 
+        List<string> activityLog = new List<string>();
+        DatabaseHelper db = new DatabaseHelper();
 
         public Form1()
         {
@@ -33,7 +34,8 @@ namespace WinFormsApp1
 
             PlayAudio();
             InitializeQuiz();
-            LogActivity("System: Chatbot started and Quiz initialized."); 
+            LogActivity("System: Chatbot started and Quiz initialized.");
+            LoadTasks();
         }
 
         private void InitializeQuiz()
@@ -118,6 +120,37 @@ namespace WinFormsApp1
                 Explanation = "Correct! Antivirus is important, but you still need safe browsing habits."
             });
 
+            quizQuestions.Add(new QuizQuestion
+            {
+                QuestionText = "11. What is 'shoulder surfing'?",
+                Options = new[] { "A) A new extreme sport", "B) Looking over someone's shoulder to steal their PIN or password", "C) A type of firewall", "D) Sending spam emails" },
+                CorrectAnswerIndex = 1,
+                Explanation = "Correct! Always shield your screen and keypad when in public places."
+            });
+
+            quizQuestions.Add(new QuizQuestion
+            {
+                QuestionText = "12. You get a popup saying all your files are encrypted and you must pay Bitcoin to get them back. What is this?",
+                Options = new[] { "A) A standard Windows update", "B) A phishing email", "C) Ransomware", "D) A harmless pop-up ad" },
+                CorrectAnswerIndex = 2,
+                Explanation = "Correct! Ransomware holds your files hostage. Always keep backups!"
+            });
+
+            quizQuestions.Add(new QuizQuestion
+            {
+                QuestionText = "13. True or False: If a website has a padlock icon (HTTPS), it means the website is 100% safe and legitimate.",
+                Options = new[] { "A) True", "B) False", "C) Only if it's a bank", "D) Only on public Wi-Fi" },
+                CorrectAnswerIndex = 1,
+                Explanation = "Correct! HTTPS just means the connection is encrypted. Scammers can also get padlocks for their fake websites."
+            });
+
+            quizQuestions.Add(new QuizQuestion
+            {
+                QuestionText = "14. Which of these is the safest thing to post on social media?",
+                Options = new[] { "A) Your ID number", "B) A photo of your new pet", "C) Your home address", "D) A photo of your plane ticket" },
+                CorrectAnswerIndex = 1,
+                Explanation = "Correct! Posting personal info like IDs or travel plans makes you a target for identity theft or break-ins."
+            });
 
             ShowQuestion();
         }
@@ -197,9 +230,23 @@ namespace WinFormsApp1
             }
         }
 
+        private void LoadTasks()
+        {
+            try
+            {
+                // Get the data from DatabaseHelper
+                dgvTasks.DataSource = db.GetAllTasks();
+                LogActivity("System: Task list refreshed from database.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading tasks: " + ex.Message);
+            }
+        }
+
         private void DisplayWelcomeMessage()
         {
-            chatBox.AppendText("Bot: Hello! Welcome to ZAMASWASI Cybersecurity AwarenessBot. I'm here to help you stay safe online. What would you like to know about online safety?\r\n\r\n");
+            chatDisplay.AppendText("Bot: Hello! Welcome to ZAMASWASI Cybersecurity AwarenessBot. I'm here to help you stay safe online. What would you like to know about online safety?\r\n\r\n");
         }
 
         // Handles the Enter key press in the input box
@@ -214,27 +261,73 @@ namespace WinFormsApp1
 
         private void SendMessage(object sender, EventArgs e)
         {
-            LogActivity("User typed a message in the chatbot.");
             string question = inputBox.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(question))
                 return;
 
-            chatBox.AppendText($"You: {question}\r\n");
+            // 1. Show the user's message
+            chatDisplay.AppendText($"You: {question}\r\n");
 
-            // Pass the actual question to ChatEngine
-            // The ChatEngine now returns multi-paragraph strings using \n\n
+            string lowerInput = question.ToLower();
+
+            // --- NLP SIMULATION ROUTING ---
+
+            // Command: Start Quiz
+            if (lowerInput.Contains("quiz") || lowerInput.Contains("game") || lowerInput.Contains("test"))
+            {
+                chatDisplay.AppendText("Bot: Starting the Cybersecurity Quiz for you! Good luck.\r\n\r\n");
+                tabControl1.SelectedTab = tabPage3; // Switches to Quiz tab
+                LogActivity("User started the Quiz via chat command.");
+                inputBox.Clear();
+                return;
+            }
+
+            // Command: Show Activity Log
+            if (lowerInput.Contains("activity log") || lowerInput.Contains("what have you done") || lowerInput.Contains("show log"))
+            {
+                chatDisplay.AppendText("Bot: Opening the Activity Log. Here is what I've been up to:\r\n\r\n");
+                tabControl1.SelectedTab = tabPage4; // Switches to Log tab
+                LogActivity("User viewed the Activity Log via chat command.");
+                inputBox.Clear();
+                return;
+            }
+
+            // Command: Task Manager + Smart Task Extraction
+            if (lowerInput.Contains("task") || lowerInput.Contains("remind"))
+            {
+                chatDisplay.AppendText("Bot: Opening the Task Manager for you.\r\n\r\n");
+                tabControl1.SelectedTab = tabPage2; // Switches to Task tab
+
+                if (lowerInput.Contains("remind me to"))
+                {
+                    int startIndex = lowerInput.IndexOf("remind me to") + 13;
+                    string extractedTask = question.Substring(startIndex).Trim();
+                    txtTaskTitle.Text = extractedTask; // Auto-fills the task title
+                    chatDisplay.AppendText($"Bot: I have pre-filled your task: '{extractedTask}'. Please set a date and click Add Task.\r\n\r\n");
+                }
+                else
+                {
+                    chatDisplay.AppendText("Bot: You can add your new task here.\r\n\r\n");
+                }
+
+                LogActivity("User opened Task Manager via chat command.");
+                inputBox.Clear();
+                return;
+            }
+
+            // --- NORMAL CHATBOT RESPONSE ---
             string answer = botEngine.GetResponse(question);
-
-            chatBox.AppendText($"Bot: {answer}\r\n\r\n");
+            chatDisplay.AppendText($"Bot: {answer}\r\n\r\n");
+            LogActivity("User chatted with the bot."); // Logs normal chat
 
             inputBox.Clear();
             inputBox.Focus();
-
-            // Scroll to the very bottom so the user sees the new message
-            chatBox.SelectionStart = chatBox.Text.Length;
-            chatBox.ScrollToCaret();
+            chatDisplay.SelectionStart = chatDisplay.Text.Length;
+            chatDisplay.ScrollToCaret();
         }
+        
+
 
         private void PlayAudio()
         {
@@ -274,22 +367,22 @@ namespace WinFormsApp1
             // Left empty intentionally. This is a placeholder for future UI updates.
         }
 
-        private void chatBox_TextChanged(object sender, EventArgs e)
+        private void richChatBox_TextChanged(object sender, EventArgs e)
         {
             // Ensure the chat box always scrolls to the bottom whenever new text is added.
             // This handles the initial welcome message and all bot replies.
-            chatBox.SelectionStart = chatBox.Text.Length;
-            chatBox.ScrollToCaret();
+            richChatBox.SelectionStart = richChatBox.Text.Length;
+            richChatBox.ScrollToCaret();
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
         {
-
+            // Left empty intentionally. This is a placeholder for future UI updates.
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            // Left empty intentionally. This is a placeholder for future UI updates.
         }
 
         private void btnSubmitAnswer_Click(object sender, EventArgs e)
@@ -371,8 +464,103 @@ namespace WinFormsApp1
                 ShowQuestion();
             }
         }
+
+        private void btnAddTask_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtTaskTitle.Text))
+            {
+                MessageBox.Show("Please enter a task title!");
+                return;
+            }
+
+            try
+            {
+                DateTime? reminder = dtpReminder.Checked ? dtpReminder.Value : (DateTime?)null;
+                db.AddTask(txtTaskTitle.Text, txtTaskDesc.Text, reminder);
+
+                // THIS IS THE LINE THAT LOGS IT
+                LogActivity($"Added Task: {txtTaskTitle.Text}");
+
+                MessageBox.Show("Task added successfully!");
+
+                txtTaskTitle.Clear();
+                txtTaskDesc.Clear();
+                dtpReminder.Checked = false;
+
+                LoadTasks();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error adding task: " + ex.Message);
+            }
+        }
+
+        private void btnCompleteTask_Click(object sender, EventArgs e)
+        {
+            // Make sure a row is selected
+            if (dgvTasks.SelectedRows.Count > 0)
+            {
+                try
+                {
+                    // Get the TaskID from the selected row
+                    int taskId = Convert.ToInt32(dgvTasks.SelectedRows[0].Cells["TaskID"].Value);
+                    string taskTitle = dgvTasks.SelectedRows[0].Cells["Title"].Value.ToString();
+
+                    db.UpdateTaskStatus(taskId, true);
+                    LogActivity($"Task Completed: {taskTitle}");
+
+                    LoadTasks();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error completing task: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a task from the list first.");
+            }
+        }
+
+        private void btnDeleteTask_Click(object sender, EventArgs e)
+        {
+            if (dgvTasks.SelectedRows.Count > 0)
+            {
+                var confirmResult = MessageBox.Show("Are you sure you want to delete this task?", "Confirm Delete", MessageBoxButtons.YesNo);
+
+                if (confirmResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        int taskId = Convert.ToInt32(dgvTasks.SelectedRows[0].Cells["TaskID"].Value);
+                        string taskTitle = dgvTasks.SelectedRows[0].Cells["Title"].Value.ToString();
+
+                        db.DeleteTask(taskId);
+                        LogActivity($"Task Deleted: {taskTitle}");
+
+                        LoadTasks();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error deleting task: " + ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a task from the list first.");
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
-    }
+}
+
+
 
 
     public class QuizQuestion
