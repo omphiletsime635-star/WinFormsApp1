@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using MySql.Data.MySqlClient;
 
@@ -6,7 +6,6 @@ namespace WinFormsApp1
 {
     public class DatabaseHelper
     {
-        // Because you are using XAMPP, the default username is 'root' and the password is empty.
         private string connectionString = "Server=localhost;Database=CyberBotDB;Uid=root;Pwd=;";
 
         public MySqlConnection GetConnection()
