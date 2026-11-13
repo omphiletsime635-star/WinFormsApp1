@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +17,7 @@ namespace WinFormsApp1
         private List<string> fallbackResponses;
         private List<string> sentimentKeywords;
         private List<string> followUpKeywords;
+        private Dictionary<string, string> differenceResponses;
 
         public ChatEngine()
         {
@@ -25,6 +26,30 @@ namespace WinFormsApp1
 
         private void InitializeResponses()
         {
+
+            // Initialize the difference responses
+            differenceResponses = new Dictionary<string, string>();
+
+            differenceResponses.Add("password_scam", "A password is a string of characters used to verify identity and secure access to an account, while a scam is a deceptive scheme designed to trick you into giving away money or information. An example of a password is your 12-character login code, whereas an example of a scam is a fake email claiming you won a lottery. To avoid password issues, use a password manager and never reuse passwords; to avoid scams, never send money to strangers and verify the source. If your password is compromised, change it immediately and enable 2FA. If you fall for a scam, contact your bank immediately to freeze your accounts and report it to the SAFPS or SAPS.");
+
+            differenceResponses.Add("password_privacy", "Passwords act as the digital lock protecting your account, while privacy is your ability to control what personal information you share and who can see it. An example of a password is a secure login, whereas an example of privacy is setting your social media profile to 'friends only.' To avoid password issues, create complex, unique credentials; to avoid privacy breaches, regularly review your account settings and limit what you post. If your password is compromised, reset it on all accounts. If your privacy is breached, lock down your accounts, remove sensitive information from public view, and change your passwords.");
+
+            differenceResponses.Add("password_phishing", "A password is the key that grants access, while phishing is a cyberattack where scammers use fake messages to steal that key from you. An example of a password is a unique passphrase, while an example of phishing is an email pretending to be your bank asking you to 'verify' your login details. To avoid password issues, never share them with anyone; to avoid phishing, check sender addresses carefully and hover over links before clicking. If your password is compromised, change it instantly. If you fall for phishing, change your password on the legitimate site immediately, contact your bank if financial details were shared, and report the email.");
+
+            differenceResponses.Add("password_cybersecurity", "A password is just one specific authentication tool, whereas cybersecurity is the broad practice of protecting your entire system, network, and devices from all digital attacks. An example of a password is your login credential, while an example of cybersecurity is using antivirus software and installing security patches. To avoid password issues, enable Two-Factor Authentication (2FA). To maintain good cybersecurity, keep your operating system updated, use firewalls, and back up your data regularly. If your password is compromised, change it. If your overall cybersecurity is breached (like a virus), disconnect from the internet, run a full antivirus scan, and seek professional IT help.");
+
+            differenceResponses.Add("scam_privacy", "A scam is an active fraudulent attempt to steal your money or data, while privacy is the passive control you have over who can see your personal information. An example of a scam is a fake invoice demanding urgent payment, whereas an example of privacy is hiding your phone number from public directories. To avoid scams, be highly skeptical of urgent requests; to maintain privacy, be careful what you post online. If you fall for a scam, contact your bank to block transactions and report the fraud. If your privacy is compromised, lock down your accounts, change your passwords, and remove personal data from public websites.");
+
+            differenceResponses.Add("scam_phishing", "A scam is the overarching goal of defrauding someone (like a fake investment), while phishing is the specific method or delivery tool (like a fake email link) used to execute that scam. An example of a scam is a romance scam on social media, while an example of phishing is a text message claiming to be from a delivery company asking for a fee. To avoid scams, research the company or person before engaging; to avoid phishing, never click links in unsolicited messages. If you fall for a scam, contact your bank and local authorities. If you fall for phishing, change your credentials immediately and scan your device for malware.");
+
+            differenceResponses.Add("scam_cybersecurity", "A scam is a psychological operation relying on human deception to get you to hand over assets, whereas cybersecurity is the technical defense used to protect your devices and networks from malicious software. An example of a scam is someone pretending to be a charity to get donations, while an example of cybersecurity is a firewall blocking an unauthorized connection. To avoid scams, trust your instincts and verify identities. To maintain cybersecurity, keep your software patched and use reputable antivirus tools. If you fall for a scam, report it to the authorities. If your cybersecurity is breached, disconnect your device from the internet and run a scan.");
+
+            differenceResponses.Add("privacy_phishing", "Privacy is your right to keep personal data out of the public eye, while phishing is a malicious attempt to trick you into revealing that data. An example of privacy is setting a password on your smartphone, whereas an example of phishing is a fake login page designed to capture your credentials. To maintain privacy, audit your social media settings regularly. To avoid phishing, always verify the URL of a website before entering your password. If your privacy is breached, lock down your settings and remove exposed data. If you fall for phishing, change your password immediately and enable 2FA.");
+
+            differenceResponses.Add("privacy_cybersecurity", "Privacy is about controlling who has access to your information, while cybersecurity is about protecting the systems that hold that information from being hacked. An example of privacy is deciding not to share your ID number online, while an example of cybersecurity is using a VPN on public Wi-Fi to encrypt your data. To maintain privacy, limit what you share and use private browsing modes. To maintain cybersecurity, use strong, unique passwords and keep your software updated. If your privacy is compromised, restrict your account visibility. If your cybersecurity is compromised, change all your passwords, disconnect from the internet, and monitor accounts for suspicious activity.");
+
+            differenceResponses.Add("phishing_cybersecurity", "Phishing is a specific, human-focused attack method (deception via email/text), whereas cybersecurity is the overall technical defense system (firewalls, antivirus, updates) used against all types of attacks. An example of phishing is a scammer pretending to be your boss asking for gift cards. An example of cybersecurity is using multi-factor authentication across all accounts. To avoid phishing, scrutinize the sender's email address and never click suspicious links. To maintain cybersecurity, keep your devices updated. If you fall for phishing, report the message and change your passwords. If cybersecurity is breached, disconnect the device and run a full system scan.");
+
             // Initialize lists and dictionaries
             keywordResponses = new Dictionary<string, List<string>>();
             specialResponses = new Dictionary<string, List<string>>();
@@ -158,6 +183,16 @@ namespace WinFormsApp1
                 return GetRandomSpecialResponse("empty_input");
 
             string query = input.Trim().ToLowerInvariant();
+
+            // Check if the user is asking for a difference/comparison
+            if (query.Contains("difference") || query.Contains("compare") || query.Contains("vs"))
+            {
+                string comparisonResult = CheckForDifference(query);
+                if (!string.IsNullOrEmpty(comparisonResult))
+                {
+                    return comparisonResult;
+                }
+            }
 
             // Remember the user's name
             if (query.Contains("my name is"))
@@ -319,6 +354,34 @@ namespace WinFormsApp1
 
             return "Sorry, I don't have any advice right now.";
         }
+
+
+        private string CheckForDifference(string query)
+        {
+            bool hasPassword = query.Contains("password") || query.Contains("passcode");
+            bool hasScam = query.Contains("scam") || query.Contains("fraud");
+            bool hasPrivacy = query.Contains("privacy") || query.Contains("private");
+            bool hasPhishing = query.Contains("phishing") || query.Contains("fake email");
+            bool hasCyber = query.Contains("cybersecurity") || query.Contains("cyber");
+
+            // Find the pairs
+            if (hasPassword && hasScam) return differenceResponses["password_scam"];
+            if (hasPassword && hasPrivacy) return differenceResponses["password_privacy"];
+            if (hasPassword && hasPhishing) return differenceResponses["password_phishing"];
+            if (hasPassword && hasCyber) return differenceResponses["password_cybersecurity"];
+
+            if (hasScam && hasPrivacy) return differenceResponses["scam_privacy"];
+            if (hasScam && hasPhishing) return differenceResponses["scam_phishing"];
+            if (hasScam && hasCyber) return differenceResponses["scam_cybersecurity"];
+
+            if (hasPrivacy && hasPhishing) return differenceResponses["privacy_phishing"];
+            if (hasPrivacy && hasCyber) return differenceResponses["privacy_cybersecurity"];
+
+            if (hasPhishing && hasCyber) return differenceResponses["phishing_cybersecurity"];
+
+            return ""; // Return empty if it can't find two topics
+        }
     }
 }
+    
 
